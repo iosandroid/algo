@@ -1,12 +1,13 @@
 import csv
 import numpy as np
 from sklearn.svm import SVR
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 dates = []
 prices = []
 
 def get_data(filename):
+	count = 0;
 	with open(filename, 'r') as csvfile:
 		csvFileReader = csv.reader(csvfile)
 		next(csvFileReader)
@@ -19,21 +20,28 @@ def get_data(filename):
 #print(dates)
 #print(prices)
 
-def predict_prices():
-	global dates
+def predict_prices(dates, prices):
 	dates = np.reshape(dates, (len(dates), 1))
 	svr_lin = SVR(kernel='linear', C=1e3)
 	svr_poly = SVR(kernel='poly', C=1e3, degree = 2)
 	svr_rbf = SVR(kernel='rbf', C=1e3, gamma = 0.1)
 
 	svr_lin.fit(dates, prices)
-	print('here5')
 	#svr_poly.fit(dates, prices)
-	print('here6')
 	svr_rbf.fit(dates,prices)
+
+	plt.scatter(dates, prices, color='black', label='data')
+	plt.plot(dates, svr_rbf.predict(dates), color='red', label='RBF model')
+	#plt.plot(dates, svr_lin.predict(dates), color='green', label='Linear model')
+
+	plt.xlabel('Date')
+	plt.ylabel('Price')
+
+	plt.legend()
+	plt.show()
 	return
 
 get_data('aapl.csv')
-predict_prices()
+predict_prices(dates, prices)
 
 
