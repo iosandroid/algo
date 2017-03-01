@@ -8,28 +8,10 @@
 	"buffers":
 	[
 		{
-			"file": "/home/gadzia/Dev/notebook/BuildData.py",
+			"file": "BuildData.py",
 			"settings":
 			{
-				"buffer_size": 3500,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/home/gadzia/Dev/notebook/ZigZag.py",
-			"settings":
-			{
-				"buffer_size": 1480,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/home/gadzia/Dev/notebook/CalcReturns.py",
-			"settings":
-			{
-				"buffer_size": 163,
+				"buffer_size": 4850,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -87,11 +69,13 @@
 	},
 	"file_history":
 	[
-		"/home/gadzia/Dev/notebook/BuildData.py"
+		"/home/gadzia/Dev/notebook/BuildData.py",
+		"/home/gadzia/Dev/notebook/ZigZag.py",
+		"/home/gadzia/Dev/notebook/CalcReturns.py"
 	],
 	"find":
 	{
-		"height": 0.0
+		"height": 34.0
 	},
 	"find_in_files":
 	{
@@ -105,6 +89,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"Z"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -122,92 +107,32 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "/home/gadzia/Dev/notebook/BuildData.py",
+					"file": "BuildData.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3500,
+						"buffer_size": 4850,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								958,
-								958
+								1672,
+								1672
 							]
 						],
 						"settings":
 						{
-							"history_list_is_closing": true,
 							"syntax": "Packages/Python/Python.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 405.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "/home/gadzia/Dev/notebook/ZigZag.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1480,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								195,
-								195
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "/home/gadzia/Dev/notebook/CalcReturns.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 163,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								163,
-								163
-							]
-						],
-						"settings":
-						{
-							"auto_name": "",
-							"syntax": "Packages/Python/Python.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1087.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -218,7 +143,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 0.0
+		"height": 23.0
 	},
 	"input":
 	{
@@ -255,7 +180,7 @@
 	"project": "util.sublime-project",
 	"replace":
 	{
-		"height": 0.0
+		"height": 42.0
 	},
 	"save_all_on_build": true,
 	"select_file":

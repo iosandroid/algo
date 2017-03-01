@@ -1,16 +1,13 @@
 def ZigZag(data, minsize):
     
     N = 0
-    Z = {'zigzag': [], 'time': [], 'label' : []}
-    
-    T = N
-    
-    Count = 0;
+    T = 0
+    Z = {'zigzag': [], 'time': [], 'label' : []}    
     
     Max  = data[0]
     Min  = data[0]
     
-    Flag = False
+    Flag = True
     
     PriceLow = 0
     PriceHigh = 0    
@@ -18,13 +15,14 @@ def ZigZag(data, minsize):
     while N < len(data):
         
         PriceLow = data[N]
-        PriceHigh = data[N]        
+        PriceHigh = data[N]       
         
+
         if Flag:
             
-            if PriceHigh > Max:
-                
-                T = N
+            if PriceHigh > Max:             
+             
+             	T = N
                 Max = PriceHigh                
                 
             elif (Max - PriceLow >= minsize):
@@ -33,10 +31,8 @@ def ZigZag(data, minsize):
                 Z['label'].append(-1)
                 Z['zigzag'].append(Max)
                 
-                Flag = False
-                Count = Count + 1                                
-                
                 T = N
+                Flag = False
                 Min = PriceLow                
                 
         else:
@@ -52,11 +48,9 @@ def ZigZag(data, minsize):
                 Z['label'].append(1)
                 Z['zigzag'].append(Min)
                 
-                Flag = True
-                Count = Count + 1                
-                
                 T = N
-                Max = PriceHigh                 
+                Flag = True
+                Max = PriceHigh    
     
         N = N + 1    
 
