@@ -175,19 +175,23 @@ def BuildData2(zigzag, returns, lag):
     I = range(len(D_temp))
     I = np.random.permutation(I)
     
-    D = []
-    L = []
+    #D = []
+    #L = []
+
+    S = {'data' : [], 'label' : [], 'index' : []}
     
     for i in I:
-        D.append(D_temp[i])
-        L.append(L_temp[i])
+        S['index'].append(i)
+        S['data'].append(D_temp[i])
+        S['label'].append(L_temp[i])
     
-    D = np.array(D)
-    L = np.array(L)   
+    S['data']  = np.array(S['data'])
+    S['label'] = np.array(S['label'])
+    S['index'] = np.array(S['index'])
     
-    D = preprocessing.scale(D)
-    
-    return D, L
+    S['data'] = preprocessing.scale(S['data'])
+
+    return S
 
 def BuildData3(zigzag, returns, lag):
     

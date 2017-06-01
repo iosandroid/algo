@@ -2,7 +2,7 @@ def ZigZag(data, minsize):
     
     N = 0
     T = 0
-    Z = {'zigzag': [], 'time': [], 'label' : []}    
+    Z = {'zigzag': [], 'time': [], 'label' : []}
     
     Max  = data[0]
     Min  = data[0]
@@ -28,8 +28,9 @@ def ZigZag(data, minsize):
             elif (Max - PriceLow >= minsize):
                 
                 Z['time'].append(T)
-                Z['label'].append(-1)
+                Z['label'].append(-1)                
                 Z['zigzag'].append(Max)
+
                 
                 T = N
                 Flag = False
@@ -45,7 +46,7 @@ def ZigZag(data, minsize):
             elif (PriceHigh - Min >= minsize):
                     
                 Z['time'].append(T)
-                Z['label'].append(1)
+                Z['label'].append(1)                
                 Z['zigzag'].append(Min)
                 
                 T = N
