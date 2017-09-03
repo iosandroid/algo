@@ -3,24 +3,62 @@
 	{
 		"selected_items":
 		[
+			[
+				"show",
+				"show_progress"
+			],
+			[
+				"minutes_per_d",
+				"minutes_per_day"
+			],
+			[
+				"market",
+				"market_opens"
+			],
+			[
+				"all",
+				"all_minutes"
+			],
+			[
+				"eur",
+				"eurusd_bundle"
+			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"file": "BuildData.py",
+			"file": "/usr/local/lib/python2.7/dist-packages/zipline/data/bundles/eurusd.py",
 			"settings":
 			{
-				"buffer_size": 4850,
+				"buffer_size": 4526,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "ZigZag.py",
+			"file": "/usr/local/lib/python2.7/dist-packages/zipline/data/minute_bars.py",
 			"settings":
 			{
-				"buffer_size": 1332,
+				"buffer_size": 47378,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "Searching 3 files for \"_minute_index\"\n\n/usr/local/lib/python2.7/dist-packages/zipline/data/minute_bars.py:\n   70  \n   71  \n   72: def _calc_minute_index(market_opens, minutes_per_day):\n   73      minutes = np.zeros(len(market_opens) * minutes_per_day,\n   74                         dtype='datetime64[ns]')\n   ..\n  465          self._ohlc_ratios_per_sid = ohlc_ratios_per_sid\n  466  \n  467:         self._minute_index = _calc_minute_index(\n  468              self._schedule.market_open, self._minutes_per_day)\n  469  \n  ...\n  795          num_rec_mins = table.size\n  796  \n  797:         all_minutes = self._minute_index\n  798          # Get the latest minute we wish to write to the ctable\n  799          last_minute_to_write = pd.Timestamp(dts[-1], tz='UTC')\n\n4 matches in 1 file\n",
+			"settings":
+			{
+				"buffer_size": 781,
+				"line_ending": "Unix",
+				"name": "Find Results",
+				"scratch": true
+			}
+		},
+		{
+			"file": "/home/gadzia/.zipline/extension.py",
+			"settings":
+			{
+				"buffer_size": 198,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -78,6 +116,14 @@
 	},
 	"file_history":
 	[
+		"/usr/local/lib/python2.7/dist-packages/zipline/data/minu",
+		"/usr/local/lib/python2.7/dist-packages/zipline/data/bundles/eurusd_bundle.py",
+		"/home/gadzia/Dev/notebook/util/eurusd_bo",
+		"/home/gadzia/Dev/notebook/util/BuildData.py",
+		"/home/gadzia/Dev/notebook/util/ZigZag.py",
+		"/home/gadzia/Dev/notebook/util/BundleCSV.py",
+		"/home/gadzia/Dev/notebook/util/bundlcsv.py",
+		"/home/gadzia/Dev/notebook/sample/buy_and_hold.py",
 		"/home/gadzia/Dev/notebook/BuildData.py",
 		"/home/gadzia/Dev/notebook/ZigZag.py",
 		"/home/gadzia/Dev/notebook/CalcReturns.py"
@@ -88,9 +134,10 @@
 	},
 	"find_in_files":
 	{
-		"height": 0.0,
+		"height": 90.0,
 		"where_history":
 		[
+			""
 		]
 	},
 	"find_state":
@@ -98,6 +145,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"_minute_index",
 			"Z"
 		],
 		"highlight": true,
@@ -116,24 +164,24 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 3,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "BuildData.py",
+					"file": "/usr/local/lib/python2.7/dist-packages/zipline/data/bundles/eurusd.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4850,
+						"buffer_size": 4526,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2569,
-								2569
+								3412,
+								3412
 							]
 						],
 						"settings":
@@ -141,27 +189,115 @@
 							"syntax": "Packages/Python/Python.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 1716.0,
+						"translation.y": 1152.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "ZigZag.py",
+					"file": "/usr/local/lib/python2.7/dist-packages/zipline/data/minute_bars.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1332,
+						"buffer_size": 47378,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								99,
-								99
+								28550,
+								28550
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 12495.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 781,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										139,
+										152
+									],
+									[
+										403,
+										416
+									],
+									[
+										424,
+										437
+									],
+									[
+										606,
+										619
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								425,
+								425
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"line_numbers": false,
+							"output_tag": 1,
+							"result_base_dir": "",
+							"result_file_regex": "^([^ \t].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/home/gadzia/.zipline/extension.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 198,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								198,
+								198
 							]
 						],
 						"settings":
