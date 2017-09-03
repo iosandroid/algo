@@ -193,68 +193,98 @@ def BuildData2(zigzag, returns, lag):
 
     return S
 
-def BuildData3(zigzag, returns, lag):
+#def BuildData3(zigzag, returns, lag):
+#    
+#    D = []
+#    L = []
+#    
+#    D0 = []
+#    D1 = []
+    
+#    L0 = []
+#    L1 = []
+    
+#    N = len(returns) + 1
+#    Count = len(zigzag['time'])
+
+#    for i in range(0,N-lag):        
+#        try:
+#            index = zigzag["time"].index(i+lag-1)
+#            
+#            D0.append(returns[i:i+lag-1])
+#            
+#            if zigzag["label"][index] == 1:                
+#                L0.append([0, 0, 1])
+#            else:
+#                L0.append([1, 0, 0])
+            
+#        except:
+#            
+#            D1.append(returns[i:i+lag-1])
+#            L1.append([0, 1, 0])
+
+#    Count0 = len(D0)
+#    Count1 = len(D1)
+    
+#    #print(Count0, Count1)
+    
+#    N = Count0 / 2
+#    if Count1 > N:        
+#        D1 = np.random.permutation(D1)
+        
+#        D = D1[:N]
+#        L = L1[:N]
+        
+#    else:        
+#        D = D1
+#        L = L1
+    
+#    D_temp = np.concatenate((D, D0), axis=0)
+#    L_temp = np.concatenate((L, L0), axis=0)
+    
+#    I = range(len(D_temp))
+#    I = np.random.permutation(I)
+    
+#    D = []
+#    L = []
+    
+#    for i in I:
+#        D.append(D_temp[i])
+#        L.append(L_temp[i])
+     
+#    D = np.array(D)
+#    L = np.array(L)   
+    
+#    D = preprocessing.scale(D)
+    
+#    return D, L
+
+def BuildData4(zigzag, returns, lag):
     
     D = []
     L = []
-    
-    D0 = []
-    D1 = []
-    
-    L0 = []
-    L1 = []
-    
+  
     N = len(returns) + 1
     Count = len(zigzag['time'])
 
-    for i in range(0,N-lag):        
-        try:
-            index = zigzag["time"].index(i+lag-1)
-            
-            D0.append(returns[i:i+lag-1])
-            
-            if zigzag["label"][index] == 1:                
-                L0.append([0, 0, 1])
-            else:
-                L0.append([1, 0, 0])
-            
-        except:
-            
-            D1.append(returns[i:i+lag-1])
-            L1.append([0, 1, 0])
+    #returns = preprocessing.scale(returns)
 
-    Count0 = len(D0)
-    Count1 = len(D1)
-    
-    #print(Count0, Count1)
-    
-    N = Count0 / 2
-    if Count1 > N:        
-        D1 = np.random.permutation(D1)
+    for i in range(len(zigzag["time"])-1):
+        index0 = zigzag["time"][i + 0]
+        index1 = zigzag["time"][i + 1]
+
+        l = zigzag["label"][i + 0]
         
-        D = D1[:N]
-        L = L1[:N]
-        
-    else:        
-        D = D1
-        L = L1
+        for j in range(index0, index1):
+            r = returns[j-lag+1:j]            
+            if len(r) is not 0:
+                D.append(r)
+                L.append(l)
+            
+
+    S = {'data' : [], 'label' : []}
     
-    D_temp = np.concatenate((D, D0), axis=0)
-    L_temp = np.concatenate((L, L0), axis=0)
-    
-    I = range(len(D_temp))
-    I = np.random.permutation(I)
-    
-    D = []
-    L = []
-    
-    for i in I:
-        D.append(D_temp[i])
-        L.append(L_temp[i])
-    
-    D = np.array(D)
-    L = np.array(L)   
-    
-    D = preprocessing.scale(D)
-    
-    return D, L
+    S['data']  = np.array(D)
+    S['label'] = np.array(L)    
+
+    return S
