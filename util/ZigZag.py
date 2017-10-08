@@ -1,7 +1,12 @@
 import math
+import warnings
 import matplotlib.pyplot as plt
 
-def ZigZag(price, minsize):
+warnings.filterwarnings('ignore')
+
+
+
+def ZigZag(price, minsize, plotting = True):
     
     R = []
     N = len(price)
@@ -32,45 +37,68 @@ def ZigZag(price, minsize):
 
         Y.append({'tmin' : X0['tmax'], 'tmax' : X1['tmin'], 'label' : 0, 'slice' : 0})
 
+    if len(X)>0:
+        X0 = X[0]
+        Xn = X[-1]
+
+        if X0['tmin']>0:
+            Y.append({'tmin' : 0, 'tmax' : X0['tmin'], 'label' : 0, 'slice' : 0})
+
+        if Xn['tmax']<N:
+            Y.append({'tmin' : Xn['tmax'], 'tmax' : N, 'label' : 0, 'slice' : 0})            
+
+
     Z = sorted(X + Y, key = lambda tup : tup['tmin'])
 
 
     #### plot ##################################################################################
 
-    fig, ax = plt.subplots()
-    for i in range(len(Z)):
+    if plotting:
+        
+        fig, ax = plt.subplots()
+        for i in range(len(Z)):
 
-        i0    = Z[i]['tmin']
-        i1    = Z[i]['tmax']
-        label = Z[i]['label']
-        slice = Z[i]['slice']
+            i0    = Z[i]['tmin']
+            i1    = Z[i]['tmax']
+            label = Z[i]['label']
+            slice = Z[i]['slice']
 
-        color = None
+            color = None
 
-        if label < 0:
-            color = 'red'
-        elif label > 0:
-            color = 'blue'
-        else:
-            color = 'green'
+            if label < 0:
+                color = 'red'
+            elif label > 0:
+                color = 'blue'
+            else:
+                color = 'green'
 
-        ax.plot(range(i0, i1+1), price[i0 : i1+1], color = color)
+            ax.plot(range(i0, i1), price[i0 : i1], color = color)
 
-        print i0, i1, i1 - i0, label, slice, price[i0], price[i1], price[i1] - price[i0]        
+            #print i0, i1, i1 - i0, label, slice, price[i0], price[i1], price[i1] - price[i0]        
 
-    plt.show()
+        plt.show()
 
     ############################################################################################
     
+    B = 0
     S = 0
+    H = 0
+
     for i in range(len(Z)):
 
         i0 = Z[i]['tmin']
         i1 = Z[i]['tmax']
 
-        S  = S + (i1 - i0)
+        label = Z[i]['label']
 
-    print N, S
+        if label < 0:
+            S = S + (i1-i0)
+        elif label > 0:
+            B = B + (i1-i0)
+        else:
+            H = H + (i1-i0)
+
+    print 'Buys: %s; Sells: %s; Holds: %s; Count: %s' % (B,S,H,N)
 
     ############################################################################################
 

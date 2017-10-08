@@ -1,51 +1,118 @@
+import warnings
+
 import numpy as np
-
 import matplotlib.pyplot as plt
-
-from scipy.linalg import hankel
 
 from util.ZigZag import ZigZag
 from util.CalcReturns import CalcReturns
 
-
-#from sklearn import preprocessing
+from scipy.linalg import hankel
 from sklearn.preprocessing import MinMaxScaler
 
-def BuildTrainSetForMLUsingPrices(prices, minsize, lag):   
+warnings.filterwarnings('ignore')
+
+
+def TrainingSet_ML_Prices(prices, minsize, lag, scale = False):
 
     S = MinMaxScaler()
-    P = prices
-    
-    #P = S.fit_transform(P)
-    #M = S.transform([minsize])
+    P = prices    
     M = minsize
 
-    Z = ZigZag(P, M)
+    Z = ZigZag(P, M, True)
 
     N = len(P)
-    T = { 'input' : hankel(P[0 : lag], P[lag-1 :]).T, 'label' : np.full(N-lag, 0) }
+    T = { 'input' : hankel(P[0 : lag], P[lag-1 :]).T, 'label' : np.full(N-lag+1, 0) }
+
+    #fliter Z according lag
+    for i in range(len(Z)):    
+        tmin = Z[i]['tmin']
+        tmax = Z[i]['tmax']
+
+        if (tmin <= lag) and (lag < tmax):            
+
+            Z[i]['tmin'] = lag
+            if i > 0:
+                Z = Z[i-1:]
+
+            break
 
     for i in range(len(Z)):
         tmin = Z[i]['tmin']
         tmax = Z[i]['tmax']
 
-        T['label'][tmin:tmax] = np.full(tmax - tmin, Z[i]['label'])
+        T['label'][tmin-lag : tmax-lag] = np.full(tmax - tmin, Z[i]['label'])
+
+    S = MinMaxScaler()
+    if scale:
+        P = S.fit_transform(P)
+
+        for i in range(len(T)):
+            T['input'][i] = S.transform(T['input'][i])
 
     return T, S
 
-def BuildTrainSetForMLUsingReturns(prices, minsize, lag):   
+def TrainingSet_ML_Logret(prices, minsize, lag, scale = False):   
 
     P = prices
     N = len(P)
 
-    T0, S = BuildTrainSetForMLUsingPrices(prices, minsize, lag + 1)
+    T0, _ = TrainingSet_ML_Prices(prices, minsize, lag + 1)
     T = { 'input' : np.full((N-lag, lag), 0), 'label' : T0['label'] }
 
     for i in range(len(T0['input'])):
         T['input'][i] = CalcReturns(T0['input'][i])
 
+    S = MinMaxScaler()
+    if scale:
+        P = S.fit_transform(CalcReturns(P))
+
+        for i in range(len(T)):
+            T['input'][i] = S.transform(T['input'][i])
+
     return T, S
 
+
+def TrainingSet_NN_Prices(prices, minsize, lag, scale = False):
+
+    T, S = TrainingSet_ML_Prices(prices, minsize, lag, scale)
+    N = len(T['label'])
+
+    L = np.full((N, 3), 0)
+
+    for i in range(N):
+        label = T['label'][i]
+
+        if label > 0:
+            L[i] = np.array([0, 0, 1])
+        elif label < 0:
+            L[i] = np.array([1, 0, 0])
+        else:
+            L[i] = np.array([0, 1, 0])
+
+    T['label'] = L
+
+    return T, S
+
+def TrainingSet_NN_Logret(prices, minsize, lag, scale = False):
+
+    T, S = TrainingSet_ML_Logret(prices, minsize, lag, scale)
+    N = len(T['label'])
+
+    L = np.full((N, 3), 0)
+
+    for i in range(N):
+        label = T['label'][i]
+
+        if label > 0:
+            L[i] = np.array([0, 0, 1])
+        elif label < 0:
+            L[i] = np.array([1, 0, 0])
+        else:
+            L[i] = np.array([0, 1, 0])
+
+    T['label'] = L
+
+    return T, S
 
 # Build data without trend removing
 #def BuildData0(zigzag, prices):
