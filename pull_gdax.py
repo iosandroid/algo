@@ -16,7 +16,7 @@ def main():
 	symbol = sys.argv[1]
 	
 	public_client = gdax.PublicClient()
-	delta = datetime.timedelta(seconds = 60 * 300)
+	delta = datetime.timedelta(seconds = switch_granularity(granularity) * limit)
 
 	time_data = []
 

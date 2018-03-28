@@ -3,9 +3,29 @@ import csv
 import datetime
 from dateutil import parser
 
+def switch_granularity(x):
+	return {
+		'1m' : 60,
+		'5m' : 60*5,
+		'15m': 60*15,
+		'30m': 60*30,
+		'1h' : 60*60,
+		'3h' : 60*60*3,
+		'6h' : 60*60*6,
+		'12h': 60*60*12,
+		'1D' : 60*60*24,
+		'7D' : 60*60*24*7,
+		'14D': 60*60*24*14
+	}[x]
+
 def FillGapsInCSV(inputFile):
 
 	arr = []
+
+	lhs, rhs = inputFile.split('.')
+	granularity = lhs[-3:] if lhs[-3:-1].isdigit() else lhs[-2:]
+
+	print(granularity)
 
 	#read csv
 	with open(inputFile) as csvfile:
@@ -14,8 +34,7 @@ def FillGapsInCSV(inputFile):
 		for row in reader:
 			arr.append(row)
 
-
-	delta = datetime.timedelta(minutes = 1)
+	delta = datetime.timedelta(seconds = switch_granularity(granularity))
 
 	for i in range(len(arr)):
 
@@ -63,7 +82,7 @@ def FillGapsInCSV(inputFile):
 	outputFile = inputFile
 
 	#write csv
-	with open(outputFile, 'wb') as csvfile:
+	with open(outputFile, 'w') as csvfile:
 		writer = csv.writer(csvfile, delimiter = ',')
 		writer.writerow(['Date','Time','Open', 'High', 'Low', 'Close', 'Volume'])
 
@@ -77,7 +96,7 @@ def FillGapsInCSV(inputFile):
 def main():
 	for file in sys.argv[1:]:
 
-		print 'Preparing: ' + file
+		print('Validating: ' + file)
 		FillGapsInCSV(file)
 
 	data = {}
@@ -123,8 +142,8 @@ def main():
 	start_stamp = max(first_rows, key = lambda r: r['stamp'])['stamp']
 	end_stamp = min(last_rows, key = lambda r: r['stamp'])['stamp']
 
-	print start_stamp
-	print end_stamp
+	print(start_stamp)
+	print(end_stamp)
 
 	for file in sys.argv[1:]:
 
@@ -139,7 +158,7 @@ def main():
 
 	for file in sys.argv[1:]:
 
-		with open(file, 'wb') as csvfile:
+		with open(file, 'w') as csvfile:
 
 			writer = csv.writer(csvfile, delimiter = ',')
 			writer.writerow(['Date','Time','Open', 'High', 'Low', 'Close', 'Volume'])
