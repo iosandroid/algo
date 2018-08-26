@@ -1,4 +1,6 @@
-def ZigZag(data, minsize):
+import numpy as np
+
+def zig_zag(data, minsize):
     
     N = len(data) - 1
     Z = {'zigzag': [], 'time': []}
@@ -51,10 +53,8 @@ def ZigZag(data, minsize):
     
         N = N - 1
         
-    Z['time'] = list(reversed(Z['time']))
-    #Z['time'] = Z['time'][:Count-2]
-    
-    Z['zigzag'] = list(reversed(Z['zigzag']))
+    Z['time'] = np.array(list(reversed(Z['time'])))
+    Z['zigzag'] = np.array(list(reversed(Z['zigzag'])))
     
     return Z
-    #Z['zigzag'] = Z['zigzag'][:Count-2]
+    
