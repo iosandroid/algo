@@ -266,7 +266,7 @@ def main():
 
 	dollar_M = 1000000
 	dollar_df = dollar_bar_df(df, 'dollar_volume', dollar_M)
-	dollar_df = dollar_df.iloc[0:300]
+	#dollar_df = dollar_df.iloc[0:300]
 
 	close = dollar_df.price.copy()
 	close = close[~close.index.duplicated(keep='first')]
