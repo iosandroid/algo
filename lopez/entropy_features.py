@@ -25,6 +25,11 @@ def pmf1(msg, w):
 	# Compute the prob mass function for a one-dim discrete rv
 	# len(msg) - w occurrences
 
+	try:
+		xrange
+	except NameError:
+		xrange = range
+	
 	lib = {}
 	if not isinstance(msg, str):
 		msg = ''.join(map(str, msg))
@@ -43,6 +48,11 @@ def pmf1(msg, w):
 
 def lempelZiv_lib(msg):
 
+	try:
+		xrange
+	except NameError:
+		xrange = range
+
 	i, lib = 1, [msg[0]]
 	while i < len(msg):
 
@@ -59,6 +69,11 @@ def lempelZiv_lib(msg):
 def matchLength(msg, i, n):
 	# Maximum matched length + 1, with overlap.
 	# i >= n & len(msg) >= i+n
+
+	try:
+		xrange
+	except NameError:
+		xrange = range
 
 	subS = ''
 	for l in xrange(n):
@@ -80,12 +95,17 @@ def konto(msg, window = None):
 	* If the end of msg is more relevant, try konto(msg[::-1])
 	'''
 
+	try:
+		xrange
+	except NameError:
+		xrange = range
+
 	out = {'num' : 0, 'sum' : 0, 'subS' : []}
 	if not isinstance(msg, str):
 		msg = ''.join(map(str, msg))
 
 	if window is None:
-		points = xrange(1, len(msg) / 2 + 1)
+		points = xrange(1, int(len(msg) / 2) + 1)
 	else:
 		window = min(window, len(msg) / 2)
 		points = xrange(window, len(msg) - window + 1)

@@ -35,7 +35,7 @@ def get_bsadf(logP, minSL, constant, lags):
     return out
 
 def get_bsadf0(logP, minSL, constant, lags):
-    startPoints, bsadf, allADF = range(0, logP.shape[0] - minSL + 1), None, []
+    startPoints, bsadf, allADF = range(0, logP.shape[0] - minSL + 1), -1000000.0, [] #CRAP:
 
     for start in startPoints:
         DF = adfuller(logP[start:], maxlag = lags, regression = constant, autolag = None)[0]

@@ -125,7 +125,7 @@ def dollar_bar_df0(df, dollar_column, m):
     	price = df1.price
     	volume = np.abs(df1.volume)
 
-        volPos = df1.volume[df1.volume > 0]
+    	volPos = df1.volume[df1.volume > 0]
     	volNeg = df1.volume[df1.volume < 0]
 
     	vwap = price.dot(volume).sum() / volume.sum()
