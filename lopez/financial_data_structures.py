@@ -89,6 +89,61 @@ def dollar_bar_df(df, dollar_column, m):
     idx = dollar_bars(df, dollar_column, m)    
     return df.iloc[idx].drop_duplicates()
 
+def dollar_bar_df0(df, dollar_column, m):
+    idx = dollar_bars(df, dollar_column, m)
+
+    df0 = df.iloc[idx].drop_duplicates()
+    out = pd.DataFrame(index = df0.index)
+
+    ####################################### CRAP:
+    i0 = df.index[0]
+    i1 = df0.index[0]
+
+    df1 = df[i0:i1]
+
+    price = df1.price    
+    volume = np.abs(df1.volume)
+
+    volPos = df1.volume[df1.volume > 0]
+    volNeg = df1.volume[df1.volume < 0]
+
+    vwap = price.dot(volume).sum() / volume.sum()
+
+    out.loc[i1, 'vwap'] = vwap
+    out.loc[i1, 'high'] = price.max()
+    out.loc[i1, 'low'] = price.min()
+    out.loc[i1, 'vol_pos'] = volPos.sum()
+    out.loc[i1, 'vol_neg'] = np.abs(volNeg.sum())
+    ####################################### CRAP:
+    
+    for i in tqdm(range(len(df0.index) - 1)):
+    	i0 = df0.index[i]
+    	i1 = df0.index[i + 1]
+
+    	df1 = df[i0:i1]
+
+    	price = df1.price
+    	volume = np.abs(df1.volume)
+
+        volPos = df1.volume[df1.volume > 0]
+    	volNeg = df1.volume[df1.volume < 0]
+
+    	vwap = price.dot(volume).sum() / volume.sum()
+
+    	out.loc[i1, 'vwap'] = vwap
+    	out.loc[i1, 'high'] = price.max()
+    	out.loc[i1, 'low'] = price.min()
+    	out.loc[i1, 'vol_pos'] = volPos.sum()
+    	out.loc[i1, 'vol_neg'] = np.abs(volNeg.sum())
+
+    df0['vwap'] = out.vwap
+    df0['high'] = out.high
+    df0['low']  = out.low
+    df0['vol_pos'] = out.vol_pos
+    df0['vol_neg'] = out.vol_neg
+
+    return df0
+
 def count_bars(df, price_col='price'):
     return df.groupby(pd.TimeGrouper('1d'))[price_col].count()
 
@@ -100,7 +155,7 @@ def returns(s):
     return pd.Series(arr, index=s.index[1:])
 
 def get_test_stats(bar_types_, bar_returns_, test_func_, *args, **kwds):
-    dct = {bar : (int(bar_returns_.shape[0]), test_func_(bar_returns_,*args,**kwds)) for bar, bar_returns_ in zip(bar_types_, bar_returns_)}
+    dct = { bar : (int(bar_returns_.shape[0]), test_func_(bar_returns_,*args,**kwds)) for bar, bar_returns_ in zip(bar_types_, bar_returns_) }
     df = (pd.DataFrame.from_dict(dct).rename(index = {0 : 'sample_size', 1:'{test_func.__name__}_stat'}).T)
     
     return df

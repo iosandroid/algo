@@ -57,7 +57,7 @@ def getIndMatrix(barIx, t1):
     return indM
 
 # Compute average uniqueness
-def getAbgUniqueness(indM):
+def getAvgUniqueness(indM):
     #Average uniqueness from indicator matrix
     
     c = indM.sum(axis = 1) #concurrency

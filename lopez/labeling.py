@@ -15,23 +15,33 @@ from tqdm import tqdm, tqdm_notebook
 from mpengine import mpPandasObj
 
 # Daily Volatility Estimator [3.1]
-def getDailyVol(close,span0=100):
+def getDailyVol(close, span0 = 100):
     df0 = close.index.searchsorted(close.index - pd.Timedelta(days=1))
     df0 = df0[df0>0]
     df0 = pd.Series(close.index[df0-1], index = close.index[close.shape[0]-df0.shape[0]:])
 
     try:
         df0 = close.loc[df0.index] / close.loc[df0.values].values - 1
+        #df0 = np.log(close.loc[df0.index] / close.loc[df0.values].values)
     except Exception as e:
         print ('error: {e}\n please confirm duplicate indices')
 
-    df0 = df0.ewm(span=span0).std().rename('dailyVol')
+    df0 = df0.ewm(span=span0).std().rename('dailyVol')		
     return df0
 
 # Symmetric CUSUM Filter [2.5.2.1]
 def getTEvents(gRaw, h):
     tEvents, sPos, sNeg = [], 0, 0
-    diff = np.log(gRaw).diff().dropna().abs()
+    sEvents, pEvents = [], []
+
+    #diff = np.log(gRaw).diff().dropna().abs()
+    #diff = np.log(gRaw).diff().dropna()
+    diff = gRaw.diff()
+
+    #gRaw0 = gRaw[:-1]
+    #gRaw1 = gRaw[1:]
+
+    #diff = np.divide(gRaw1, gRaw0) - 1
 
     for i in tqdm(diff.index[1:]):
         try:
@@ -46,12 +56,14 @@ def getTEvents(gRaw, h):
         if sNeg <- h:
             sNeg = 0
             tEvents.append(i)
+            sEvents.append(i)
         
         if sPos > h:
             sPos = 0
             tEvents.append(i)
+            pEvents.append(i)
 
-    return pd.DatetimeIndex(tEvents)
+    return pd.DatetimeIndex(tEvents), pd.DatetimeIndex(sEvents), pd.DatetimeIndex(pEvents)
 
 # Adding Vertical Barrier [3.4]
 def addVerticalBarrier(tEvents, close, numDays=1):
@@ -72,7 +84,7 @@ def applyPtSlOnT1(close,events,ptSl,molecule):
         pt = pd.Series(index=events.index) # NaNs
         
     if ptSl[1]>0: 
-        sl =- ptSl[1]*events_['trgt']
+        sl = -ptSl[1]*events_['trgt']
     else: 
         sl = pd.Series(index=events.index) # NaNs
         
@@ -82,6 +94,7 @@ def applyPtSlOnT1(close,events,ptSl,molecule):
 
         out.loc[loc,'sl'] = df0[df0 < sl[loc]].index.min() # earliest stop loss
         out.loc[loc,'pt'] = df0[df0 > pt[loc]].index.min() # earliest profit taking
+
     return out
 
 # Gettting Time of First Touch (getEvents) [3.3], [3.6]
@@ -96,18 +109,17 @@ def getEvents(close, tEvents, ptSl, trgt, minRet, numThreads, t1=False, side=Non
         
     #3) form events object, apply stop loss on t1
     if side is None:
-        side_,ptSl_ = pd.Series(1.,index = trgt.index), [ptSl[0],ptSl[0]]
+        side_, ptSl_ = pd.Series(1.,index = trgt.index), [ptSl[0],ptSl[0]]
     else: 
-        side_, ptSl_ = side.loc[trgt.index],ptSl[:2]
-        
+        side_, ptSl_ = side.loc[trgt.index], ptSl[:2]
+      
     events = (pd.concat({'t1':t1,'trgt':trgt,'side':side_}, axis = 1).dropna(subset = ['trgt']))
-    
     df0 = mpPandasObj(func = applyPtSlOnT1, pdObj = ('molecule',events.index),
                     numThreads = numThreads, close = close, events = events,
                     ptSl = ptSl_)
-    
+
     events['t1'] = df0.dropna(how = 'all').min(axis = 1) # pd.min ignores nan
-    
+
     if side is None:
         events = events.drop('side',axis = 1)
         
@@ -168,7 +180,18 @@ def dropLabels(events, minPct=.05):
     # apply weights, drop labels with insufficient examples
     while True:
         df0=events['bin'].value_counts(normalize=True)
+
         if df0.min()>minPct or df0.shape[0]<3:break
         print('dropped label: ', df0.argmin(),df0.min())
         events=events[events['bin']!=df0.argmin()]
     return events
+
+def df_returns(s):
+    arr = np.diff(np.log(s))
+    return (pd.Series(arr, index=s.index[1:]))
+
+def df_rolling_autocorr(df, window, lag=1):
+    """Compute rolling column-wise autocorrelation for a DataFrame."""
+
+    return (df.rolling(window=window)
+            .corr(df.shift(lag))) # could .dropna() here
